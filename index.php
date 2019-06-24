@@ -3,7 +3,8 @@ require 'vendor/autoload.php';
 
 use GuzzleHttp\Client;
 
-const RESPONSE_LIMIT = 5;
+//TODO set limit to 50 once completed
+const RESPONSE_LIMIT = 50;
 const API_FIELD_LIST = "name;alpha2Code;alpha3Code;flag;region;subregion;population;languages";
 
 
@@ -13,6 +14,7 @@ handleRequest($userParams);
 function handleRequest($userParams) {
     // All responses returned in JSON format
     header('Content-type: application/json');
+    header("Access-Control-Allow-Origin: *");
 
     $countriesParams = ['fields' => API_FIELD_LIST];
 
@@ -27,6 +29,8 @@ function handleRequest($userParams) {
         if ($requestType === "fullName") {
             $requestType = "name";
             $countriesParams['fullText'] = "true";
+        } else if ($requestType === "code") {
+            $requestType = "alpha";
         }
         getCountries($requestType, $requestQuery, $countriesParams);
     } else {
@@ -44,10 +48,11 @@ function getCountries($type, $query, $countriesParams) {
         return;
     }
     $response = json_decode($response->getBody());
-    returnCountries($response);
+    returnCountries((array)$response);
 }
 
 function returnCountries($response) {
+    //Limiting response count
     $response = array_slice($response,0,RESPONSE_LIMIT);
     echo json_encode($response);
 }
