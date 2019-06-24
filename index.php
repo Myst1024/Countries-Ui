@@ -39,6 +39,11 @@ function handleRequest($userParams) {
 }
 
 function getCountries($type, $query, $countriesParams) {
+    //checking for invalid country code queries
+    if ($type === 'alpha' && (strLen($query) > 3 || strLen($query) < 2)) {
+        echo json_encode(['error' => 'Country codes must be 2-3 characters long']);
+        return;
+    }
     $client = new Client(['base_uri' => 'https://restcountries.eu/rest/v2/', 'http_errors' => false]);
     $response = $client->request('GET', "$type/$query", [
         'query' => $countriesParams

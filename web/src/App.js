@@ -14,13 +14,12 @@ function submitSearch(e, type, query, setCountries) {
 	axios.get(`http://localhost:3001/?type=${type}&query=${query}`)
 		.then(response => {
 			if (response.data.error) {
-				setCountries([]);
+				setCountries({'error': response.data.error});
 				console.log(response.data.error);
 			} else {
 				let countries = response.data;
 				// Accounting for differing formatting of results from REST Countries API
 				countries = Array.isArray(countries) ? countries : [countries]
-				console.log(countries);
 				setCountries(countries);
 			}
 		})

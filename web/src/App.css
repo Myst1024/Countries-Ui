@@ -47,7 +47,7 @@ body {
 .search-paper {
   min-width: 50%;
   width:300px;
-  margin: 0 auto;
+  margin: 0 auto 20px;
   padding: 10px 0;
 }
 
